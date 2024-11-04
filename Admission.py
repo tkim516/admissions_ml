@@ -7,10 +7,14 @@ import pickle
 import warnings
 warnings.filterwarnings('ignore')
 
-password_guess = st.text_input("What is the Password?", type='password')
-if password_guess != st.secrets["password"]:
-    st.stop()
+hide_password_input = False
+if hide_password_input == False:
 
+    password_guess = st.text_input("What is the password?", type='password')
+    if password_guess != st.secrets["password"]:
+        st.stop()
+    else:
+        hide_password_input = True
 # Set up the app title and image
 st.title('Graduate Admission Predictor 🌟')
 st.image('admission.jpg', use_column_width = True, 
