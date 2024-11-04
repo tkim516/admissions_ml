@@ -7,15 +7,19 @@ import pickle
 import warnings
 warnings.filterwarnings('ignore')
 
-hide_password_input = False
-if hide_password_input == False:
+if "hide_password_input" not in st.session_state:
+    st.session_state.hide_password_input = False
 
+# Only show the password input if the flag is False
+if not st.session_state.hide_password_input:
     password_guess = st.text_input("What is the password?", type='password')
-    if password_guess != st.secrets["password"]:
-        st.stop()
+    
+    if password_guess == st.secrets["password"]:
+        # Set the session state flag to hide the input box after correct password
+        st.session_state.hide_password_input = True
     else:
-        hide_password_input = True
-# Set up the app title and image
+        st.stop()  # Stop execution if password is incorrect
+
 st.title('Graduate Admission Predictor 🌟')
 st.image('admission.jpg', use_column_width = True, 
          caption = "Predict your chances of admission based on your profile")
@@ -30,7 +34,7 @@ st.write("This app uses multiple inputs to predict the probability of admission 
 
 # Reading the pickle file that we created before 
 model_pickle = open('reg_admission.pickle', 'rb') 
-reg_model = pickle.load(model_pickle) 
+reg_model = pickle.load(model_pickle)
 model_pickle.close()
 
 # Load the default dataset
